@@ -351,6 +351,7 @@ html.js .hero.is-pronta .hero__testo > * { opacity: 1; transform: none; }
 @media (max-width: 767px) { .grande--misura.grande--pannello { aspect-ratio: 4 / 5; width: calc(100% - 2 * var(--bordo)); } }
 .grande--pannello { margin-bottom: clamp(56px, 7vw, 104px); }
 .grande--pannello::after { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, rgba(18, 14, 10, .14) 0%, rgba(18, 14, 10, .34) 100%); pointer-events: none; }
+.eventi .grande--pannello::after { background: radial-gradient(ellipse 85% 42% at 50% 50%, rgba(18, 14, 10, .55) 0%, rgba(18, 14, 10, .12) 100%), linear-gradient(180deg, rgba(18, 14, 10, .14) 0%, rgba(18, 14, 10, .34) 100%); }
 .grande--palma .grande__img { object-position: 50% 44%; }
 .grande--notte .grande__img { object-position: 50% 40%; }
 .grande__titolo { position: relative; z-index: 2; display: grid; justify-items: center; gap: 1.4rem; padding-inline: var(--gutter); }
@@ -411,6 +412,7 @@ html.js .apertura.is-in .pannello__linea { transform: none; }
 
 /* ---------- Testo sotto le foto grandi, coppie di foto, stacchi ---------- */
 .singola { margin-top: var(--bordo); }
+.mosaico--stretto { max-width: 1100px; margin-top: var(--bordo); }
 .testo-sezione > p { margin-inline: auto; }
 .coppia { display: flex; justify-content: center; gap: var(--bordo); width: calc(100% - 2 * var(--bordo)); margin: var(--bordo) auto 0; }
 .coppia > .foto { flex: var(--r) 1 0%; min-width: 0; max-width: var(--w); border-radius: 4px; }

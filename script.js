@@ -331,7 +331,7 @@
 
   /* ---------- Hero: dissolvenza lenta tra 5-6 foto ---------- */
   // ogni foto è caricata poco prima di comparire; si saltano quelle che su questo schermo
-  // verrebbero ingrandite oltre il 15% dei loro pixel reali (per esempio una foto verticale su un monitor largo)
+  // verrebbero ingrandite oltre il 20% dei loro pixel reali (per esempio una foto verticale su un monitor largo)
   var heroBox = document.querySelector('[data-hero]');
   var heroImgs = Array.prototype.slice.call(heroBox.querySelectorAll('img'));
   function heroCarica(img) {
@@ -341,7 +341,7 @@
   function heroAdatta(img) {
     var w = +img.getAttribute('data-w'), h = +img.getAttribute('data-h');
     if (!w || !h) return true;
-    return Math.max(heroBox.clientWidth / w, heroBox.clientHeight / h) <= 1.15;
+    return Math.max(heroBox.clientWidth / w, heroBox.clientHeight / h) <= 1.21;
   }
   function heroDopo(i) {
     for (var k = 1; k <= heroImgs.length; k++) {
