@@ -60,6 +60,7 @@
     --c-header var(--t-luce) ease, --c-campo var(--t-luce) ease, --c-carta var(--t-luce) ease,
     --c-btn var(--t-luce) ease, --c-btn-testo var(--t-luce) ease;
 }
+html.luce-lenta { --t-luce: 3s; }
 html[data-mood="tramonto"] {
   --c-fondo: #F6DACB;
   --c-testo: #2E2420;
@@ -412,6 +413,7 @@ html.js .apertura.is-in .pannello__linea { transform: none; }
 
 /* ---------- Testo sotto le foto grandi, coppie di foto, stacchi ---------- */
 .singola { margin-top: var(--bordo); }
+.serata--passaggio .singola { margin-top: 0; }
 .mosaico--stretto { max-width: 1100px; margin-top: var(--bordo); }
 .testo-sezione > p { margin-inline: auto; }
 .coppia { display: flex; justify-content: center; gap: var(--bordo); width: calc(100% - 2 * var(--bordo)); margin: var(--bordo) auto 0; }
@@ -721,7 +723,7 @@ html.js .onda.is-in { opacity: 1; transform: none; }
 
 /* ---------- Movimento ridotto: tutto spento ---------- */
 @media (prefers-reduced-motion: reduce) {
-  :root { --t-luce: .3s; }
+  :root, html.luce-lenta { --t-luce: .3s; }
   html.js [data-reveal], html.js .onda, html.js .titolo[data-righe] .riga__in, html.js [data-lettere] .lettera, html.js .hero__testo > * { opacity: 1 !important; transform: none !important; transition: none !important; }
   html.js .rivela, html.js .apertura { clip-path: none !important; transition: none; }
   html.js .apertura .apertura__img { transform: none !important; transition: none; }

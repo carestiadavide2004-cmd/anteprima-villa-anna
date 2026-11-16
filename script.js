@@ -38,11 +38,14 @@
   function impostaMood(m) {
     if (m === moodAttuale) return;
     moodAttuale = m;
+    // foto di passaggio (data-luce-lenta): il cielo cambia più piano mentre è sullo schermo
+    root.classList.toggle('luce-lenta', !!(sezioneVincente && sezioneVincente.hasAttribute('data-luce-lenta')));
     root.setAttribute('data-mood', m);
     if (metaTema) metaTema.setAttribute('content', coloriTema[m]);
   }
 
   // la sezione che copre la parte maggiore dello schermo; se nessuna arriva al 50% resta la luce di prima
+  var sezioneVincente = null;
   function moodSulloSchermo() {
     var vh = window.innerHeight;
     var meglio = null, quota = 0;
@@ -52,6 +55,7 @@
       var vis = (Math.min(r.bottom, vh) - Math.max(r.top, 0)) / vh;
       if (vis > quota) { quota = vis; meglio = sezioni[i]; }
     }
+    sezioneVincente = quota >= 0.5 ? meglio : null;
     return quota >= 0.5 && meglio ? meglio.getAttribute('data-mood') : null;
   }
 
