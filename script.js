@@ -338,12 +338,20 @@
   // verrebbero ingrandite oltre il 20% dei loro pixel reali (per esempio una foto verticale su un monitor largo)
   var heroBox = document.querySelector('[data-hero]');
   var heroImgs = Array.prototype.slice.call(heroBox.querySelectorAll('img'));
+  function heroFonte(img) { // <source> della foto verticale usata al posto di quella orizzontale sul telefono
+    var s = img.parentNode.tagName === 'PICTURE' ? img.parentNode.querySelector('source') : null;
+    return s && window.matchMedia(s.media).matches ? s : null;
+  }
   function heroCarica(img) {
+    var src = img.parentNode.tagName === 'PICTURE' ? img.parentNode.querySelector('source') : null;
+    if (src && src.getAttribute('data-srcset')) { src.srcset = src.getAttribute('data-srcset'); src.removeAttribute('data-srcset'); }
     if (img.getAttribute('data-srcset')) { img.srcset = img.getAttribute('data-srcset'); img.removeAttribute('data-srcset'); }
     if (img.getAttribute('data-src')) { img.src = img.getAttribute('data-src'); img.removeAttribute('data-src'); }
   }
   function heroAdatta(img) {
-    var w = +img.getAttribute('data-w'), h = +img.getAttribute('data-h');
+    if (img.hasAttribute('data-sempre')) return true;
+    var f = heroFonte(img) || img;
+    var w = +f.getAttribute('data-w'), h = +f.getAttribute('data-h');
     if (!w || !h) return true;
     return Math.max(heroBox.clientWidth / w, heroBox.clientHeight / h) <= 1.21;
   }
@@ -515,9 +523,12 @@
     requestAnimationFrame(passo);
   });
 
-  /* ---------- Video del matrimonio: parte solo quando è visibile ---------- */
-  var video = document.getElementById('video-matrimonio');
-  if (video) {
+  /* ---------- Video (matrimonio e apertura della Villa): partono solo quando sono visibili ---------- */
+  document.querySelectorAll('video.video__el').forEach(function (video) {
+    var ap = video.closest('.apertura');
+    if (ap && ap.getAttribute('data-apertura') !== 'video') return; // apertura con la foto
+    // l'apertura parte chiusa (clip-path): si osserva la sua sezione finché non si è aperta
+    var guarda = ap ? ap.parentNode : video;
     var playBtn = video.parentNode.querySelector('.video__play');
     var avviaAMano = function () {
       playBtn.hidden = true;
@@ -531,13 +542,20 @@
       new IntersectionObserver(function (en) {
         if (en[0].isIntersecting) {
           var p = video.play();
-          if (p && p.catch) p.catch(function () { playBtn.hidden = false; });
+          if (p && p.catch) p.catch(function () { if (video.paused) playBtn.hidden = false; });
         } else if (!video.paused) {
           video.pause();
         }
-      }, { threshold: 0.35 }).observe(video);
+      }, ap ? { rootMargin: '0px 0px -40% 0px' } : { threshold: 0.35 }).observe(guarda);
+      if (ap) { // fuori schermo l'apertura si ferma anche se la sezione è ancora visibile
+        window.addEventListener('scroll', function () {
+          var r = ap.getBoundingClientRect();
+          if ((r.bottom < 0 || r.top > window.innerHeight) && !video.paused) video.pause();
+          else if (r.bottom > 0 && r.top < window.innerHeight && video.paused && playBtn.hidden && ap.classList.contains('is-in')) video.play().catch(function () {});
+        }, { passive: true });
+      }
     }
-  }
+  });
 
   /* ---------- Toast e copia del numero ---------- */
   var toast = document.getElementById('toast');
